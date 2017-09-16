@@ -11,23 +11,22 @@
     <div class="container">
         <div class="row">
 
-            <div class="col col-xs-8">
+            <div class="col col-xs-12 text-center">
 
                 <h3>Enter Git repo name</h3>
-                <form class="form-inline">
+                <form class="form-inline" ng-submit="fetchIssues()">
                     <div class="form-group">
                         <!--<label for="basic-url">Enter Repository name</label>-->
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">{{API_URL}}repos</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" ng-model="bucket.repoName">
+                            <span class="input-group-addon" id="basic-addon3">{{API_URL}}repos/</span>
+                            <input type="text" style="width: 300px" class="form-control" id="basic-url" aria-describedby="basic-addon3" ng-model="bucket.repoName">
                         </div>
                     </div>
-                    <button ng-click="fetchIssues()" class="btn btn-primary">Search</button>
+                    <button ng-click="loadIssues()" class="btn btn-primary">Search</button>
                 </form>
 
 
             </div>
-            <div class="col col-xs-4"></div>
         </div>
 
         <br>
@@ -35,13 +34,22 @@
 
         <div class="row" ng-show="issues">
             <div class="col-xs-12">
-                <h6>Total Issues : 100, Oldest: {{oldest.created_at}}  Recent: {{recent.created_at}}</h6>
-                <table class="table table-hover">
+                <h6 class="col col-xs-9">Total Issues : 100, Oldest: {{oldest.created_at | amUtc | amLocal | amDateFormat:'MM/DD/YYYY HH:mm'}}  Recent: {{recent.created_at | amUtc | amLocal | amDateFormat:'MM/DD/YYYY HH:mm'}}</h6>
+                <h6 class="col col-xs-3">
+                    <label >Sort by</label>
+                    <select name="singleSelect" id="singleSelect" ng-model="bucket.singleSelect" ng-change="fetchIssues()">
+                    <option value="">---Please select---</option>
+                    <option value="created">Created At</option>
+                    <option value="updated">Last Updated At</option>
+                    <option value="comments">Comments</option>
+                </select>
+                </h6>
+                <table class="table table-hover col col-xs-12">
                     <tr>
                         <th>Title</th>
                         <th>Created At</th>
-                        <th>Comments</th>
                         <th>Last Updated at</th>
+                        <th>Comments</th>
                         <th>Labels</th>
                     </tr>
                     <tr ng-repeat="issue in issues">
@@ -49,14 +57,18 @@
                     <td >
                         <a ng-href="{{issue.url}}">{{issue.title}}</a>
                     </td>
-                     <td>{{issue.created_at}}</td>
-                     <td>{{issue.comments}}</td>
-                     <td>{{issue.updated_at}}</td>
+                     <td>{{issue.created_at | amUtc | amLocal | amDateFormat:'MM/DD/YYYY HH:mm'}}</td>
+                    <td>{{issue.updated_at | amUtc | amLocal | amDateFormat:'MM/DD/YYYY HH:mm'}}</td>
+
+                        <td>{{issue.comments}}</td>
                      <td>
                          <span ng-repeat="label in issue.labels" class="label label-info paddingLeft">{{label.name}}</span>
                      </td>
                     </tr>
                 </table>
+                <ul uib-pagination boundary-links="true" total-items="100" ng-model="currentPage" class="pagination-lg" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+
+
             </div>
         </div>
     </div>

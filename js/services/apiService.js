@@ -9,7 +9,10 @@ angular.module("gitapp").factory('apiService',function($http,API_URL){
 
         var url = API_URL+"repos/"+filter.repoName+'/issues';
 
-
+        console.log(filter);
+        if(filter.sortBy){
+            url+="?sort="+filter.sortBy
+        }
        return  $http({
             method:"GET",
             url:url

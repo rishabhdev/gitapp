@@ -7,8 +7,7 @@ angular.module("gitapp").controller('dashboardCtrl',function($scope,apiService,A
     $scope.API_URL = API_URL;
     $scope.bucket = {};
 
-    $scope.fetchIssues = function(){
-
+    $scope.loadIssues = function(){
         apiService.getBoundryIssues($scope.bucket.repoName,true)
             .then(function(res){
                 console.log("OLD",res);
@@ -16,15 +15,16 @@ angular.module("gitapp").controller('dashboardCtrl',function($scope,apiService,A
                return apiService.getBoundryIssues($scope.bucket.repoName,false)
             })
             .then(function(res){
-                console.log("NEW",res);
                 $scope.recent = res.data[0];
-
-                return apiService.getIssues({repoName:$scope.bucket.repoName})
+                return  $scope.fetchIssues()
 
             })
+    }
+    $scope.fetchIssues = function(){
+        return apiService.getIssues({repoName:$scope.bucket.repoName,sortBy:$scope.bucket.singleSelect})
             .then(function(res){
-                console.log(res);
                 $scope.issues = res.data;
             })
+
     }
 });
