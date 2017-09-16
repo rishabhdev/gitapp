@@ -18,16 +18,45 @@
                     <div class="form-group">
                         <!--<label for="basic-url">Enter Repository name</label>-->
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">https://example.com/users/</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                            <span class="input-group-addon" id="basic-addon3">{{API_URL}}repos</span>
+                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" ng-model="bucket.repoName">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button ng-click="fetchIssues()" class="btn btn-primary">Search</button>
                 </form>
 
 
             </div>
             <div class="col col-xs-4"></div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Title</th>
+                        <th>Created At</th>
+                        <th>Comments</th>
+                        <th>Last Updated at</th>
+                        <th>Labels</th>
+                    </tr>
+                    <tr ng-repeat="issue in issues">
+
+                    <td >
+                        <a ng-href="{{issue.url}}">{{issue.title}}</a>
+                    </td>
+                     <td>{{issue.created_at}}</td>
+                     <td>{{issue.comments}}</td>
+                     <td>{{issue.updated_at}}</td>
+                     <td>
+                         <span ng-repeat="label in issue.labels" class="label label-info paddingLeft">{{label.name}}</span>
+                     </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 
